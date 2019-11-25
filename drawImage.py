@@ -35,7 +35,7 @@ def drawNumber(index):
         pixelX +=1
 
 def guess(index):
-    number = numbers.iloc[index].tolist()
+    number = numbers.iloc[index] / 255.0 * 0.99 +  0.01
     prediction = brain.predict(number)
     print(np.argmax(prediction))
 
