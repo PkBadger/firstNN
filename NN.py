@@ -25,8 +25,6 @@ class NeuralNetwork:
     def feed_forward(self, input):
         hidden = np.dot(self.weights_ih, input)
         
-        #hidden = np.sum([hidden, self.bias_h], axis=0)
-
         hidden = np.sum([hidden, self.bias_h], axis=0)
 
         afterSigmoid = sigmoid(hidden)
@@ -78,35 +76,25 @@ class NeuralNetwork:
 
         gradient = np.array([sigmoid_derivative(output) for output in outputs])
 
-        #gradient = np.reshape(gradient, (self.output_nodes, 1))
-
         gradient = gradient * output_errors
 
         gradient = self.learning_rate * gradient
 
-        #hidden_transpose = np.transpose(hidden.reshape(self.hidden_nodes,1))
-
-        weigths_ho_deltas = np.dot(gradient, hidden.T)#.reshape(self.output_nodes, self.hidden_nodes)
-
-        self.weights_ho +=weigths_ho_deltas #np.sum([self.weights_ho, weigths_ho_deltas])
+        weigths_ho_deltas = np.dot(gradient, hidden.T)
+        self.weights_ho +=weigths_ho_deltas
 
         # Hidden layer errors and gradient
         hidden_errors = np.dot(self.weights_ho.T, output_errors)
 
         hidden_gradient = np.array([sigmoid_derivative(hid) for hid in hidden])
         
-        #hidden_gradient = np.reshape(hidden_gradient, (self.hidden_nodes, 1))
-
         hidden_gradient = hidden_gradient * hidden_errors
 
         hidden_gradient = self.learning_rate * hidden_gradient
 
-        #input_transpose = np.transpose(np.reshape(input, (self.input_nodes,1)))
-
         weights_ih_deltas = np.dot(hidden_gradient,inputs.T)
 
-        self.weights_ih += weights_ih_deltas # np.sum([self.weights_ih, weights_ih_deltas])
-
+        self.weights_ih += weights_ih_deltas
 
 if __name__ == '__main__':
     brain = NeuralNetwork(2,10,1)
@@ -115,8 +103,5 @@ if __name__ == '__main__':
 
     target = 1
 
-    #print(brain.pre_feed_forward(input))
-
     output = brain.train(input, target)
 
-    #print(output)
